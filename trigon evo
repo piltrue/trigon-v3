@@ -1,2 +1,24 @@
 https://www.mediafire.com/file/uofppdckg9o4tib/Trigon_2.686_CRASH_FIX.apk/file
 here is a script i using its op fr:
+local UserInputService = game:GetService("UserInputService")
+local toggle = false
+
+-- Press K to toggle on/off
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if not gpe and input.KeyCode == Enum.KeyCode.K then
+        toggle = not toggle
+        print("[FastLoop] Status:", toggle and "On" or "Off")
+    end
+end)
+
+-- Main loop
+task.spawn(function()
+    while true do
+        if toggle then
+            -- Execute code when enabled
+            local args = {[1] = 2000}
+            game:GetService("ReplicatedStorage"):WaitForChild("TrainingUpdateRemote"):FireServer(unpack(args))
+        end
+        task.wait(0.01) -- Very small delay, prevents crash and stops immediately when toggled off
+    end
+end)
