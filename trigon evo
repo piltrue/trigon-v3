@@ -1,1 +1,24 @@
 https://www.mediafire.com/file/uofppdckg9o4tib/Trigon_2.686_CRASH_FIX.apk/file
+here is a script i using its op fr:
+local UserInputService = game:GetService("UserInputService")
+local toggle = false
+
+-- Bấm K để bật/tắt
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if not gpe and input.KeyCode == Enum.KeyCode.K then
+        toggle = not toggle
+        print("[FastLoop] Trạng thái:", toggle and "Bật" or "Tắt")
+    end
+end)
+
+-- Vòng loop chính
+task.spawn(function()
+    while true do
+        if toggle then
+            -- Thực hiện code khi bật
+            local args = {[1] = 2000}
+            game:GetService("ReplicatedStorage"):WaitForChild("TrainingUpdateRemote"):FireServer(unpack(args))
+        end
+        task.wait(0.01) -- Delay siêu nhỏ, để không crash và vẫn dừng ngay khi tắt
+    end
+end)
