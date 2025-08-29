@@ -1,4 +1,7 @@
+*Explain: so u gotta press k first for make it turn on so good luck
+
 here is a script i using its op fr:
+
 local UserInputService = game:GetService("UserInputService")
 local toggle = false
 
