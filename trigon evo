@@ -1,5 +1,5 @@
 https://www.mediafire.com/file/uofppdckg9o4tib/Trigon_2.686_CRASH_FIX.apk/file
-here is a script i using its op fr:
+here is a script i'm using its op fr:
 local UserInputService = game:GetService("UserInputService")
 local toggle = false
 
