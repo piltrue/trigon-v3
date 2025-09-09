@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Main loop (luôn chạy, không cần phím K hay nút)
+-- Main loop 
 task.spawn(function()
     while true do
         local args = {[1] = 2000}
