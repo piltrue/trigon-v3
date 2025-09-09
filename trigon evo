@@ -7,7 +7,6 @@ local toggle = false
 UserInputService.InputBegan:Connect(function(input, gpe)
     if not gpe and input.KeyCode == Enum.KeyCode.K then
         toggle = not toggle
-        print("[FastLoop] Status:", toggle and "On" or "Off")
     end
 end)
 
