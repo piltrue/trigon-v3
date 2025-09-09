@@ -1,0 +1,10 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Main loop (luôn chạy, không cần phím K hay nút)
+task.spawn(function()
+    while true do
+        local args = {[1] = 2000}
+        ReplicatedStorage:WaitForChild("TrainingUpdateRemote"):FireServer(unpack(args))
+        task.wait(0.01)
+    end
+end)
