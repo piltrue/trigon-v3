@@ -1,39 +1,37 @@
 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local camera = workspace.CurrentCamera
 
 while true do
-    humanoidRootPart.CFrame = CFrame.new(-175, 4, 80)
-    humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(0, math.rad(90), 0)
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local targetMesh = game.Workspace.Debris.TrainingModels.RoadworkClock:FindFirstChild("Mesh")
 
-    wait(1)
+    if targetMesh and targetMesh:IsA("BasePart") then
+        local targetPosition = targetMesh.Position
+        humanoidRootPart.CFrame = CFrame.new(targetPosition)
 
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + Vector3.new(0, 1, -1))
+        camera.CameraType = Enum.CameraType.Scriptable
+        local camOffset = Vector3.new(0, 10, 0)
+        camera.CFrame = CFrame.new(humanoidRootPart.Position + camOffset, humanoidRootPart.Position)
 
-    wait(1)
+        wait(1)
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        wait(2)
 
-    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        humanoidRootPart.CFrame = CFrame.new(-162, 4, 37)
 
-    wait(2)
+        for i = 1, 2 do
+            wait(0.5)
+            humanoidRootPart.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 2, 0)
+            wait(0.5)
+            humanoidRootPart.CFrame = humanoidRootPart.CFrame - Vector3.new(0, 2, 0)
+        end
 
-    humanoidRootPart.CFrame = CFrame.new(-162, 4, 37)
-
-    for i = 1, 2 do
-        wait(0.5)
-        humanoidRootPart.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 2, 0)
-        wait(0.5)
-        humanoidRootPart.CFrame = humanoidRootPart.CFrame - Vector3.new(0, 2, 0)
+        wait(1)
+        character:BreakJoints()
+        wait(3)
+    else
+        wait(2)
     end
-
-    wait(1)
-
-    character:BreakJoints()
-
-    wait(3)
-
-    character = player.Character or player.CharacterAdded:Wait()
-    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 end
