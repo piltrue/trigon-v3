@@ -11,6 +11,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
+local startPos = Vector3.new(-176, 4, 81)
+
 local waypoints = {
     Vector3.new(-162, 4, 37),
     "jump",
@@ -41,40 +43,48 @@ while true do
         local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
         local targetMesh = game.Workspace.Debris.TrainingModels.RoadworkClock:FindFirstChild("Mesh")
 
+        humanoidRootPart.CFrame = CFrame.new(startPos)
+        task.wait(0.5)
+
         if targetMesh and targetMesh:IsA("BasePart") then
-            humanoidRootPart.CFrame = CFrame.new(targetMesh.Position)
-            task.wait(0.5)
-
             camera.CameraType = Enum.CameraType.Scriptable
-            local camOffset = Vector3.new(0, 8, -10)
-            camera.CFrame = CFrame.new(humanoidRootPart.Position + camOffset, targetMesh.Position)
-            task.wait(0.5)
-            camera.CameraType = Enum.CameraType.Custom
+            local meshPos = targetMesh.Position
 
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
-            task.wait(0.2)
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
-            task.wait(1)
+            local camOffsets = {
+                Vector3.new(0, 10, -10),  -- từ trên xuống + chéo sau
+                Vector3.new(10, 8, 0),    -- từ bên phải
+                Vector3.new(-10, 8, 0),   -- từ bên trái
+            }
 
-            for _, wp in ipairs(waypoints) do
-                if wp == "jump" then
-                    for i = 1, 2 do
-                        humanoidRootPart.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 2, 0)
-                        wait(0.5)
-                        humanoidRootPart.CFrame = humanoidRootPart.CFrame - Vector3.new(0, 2, 0)
-                        wait(0.5)
-                    end
-                else
-                    humanoidRootPart.CFrame = CFrame.new(wp)
-                    wait(1)
-                end
+            for _, offset in ipairs(camOffsets) do
+                camera.CFrame = CFrame.new(meshPos + offset, meshPos)
+                task.wait(0.3)
             end
 
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
-            task.wait(1)
-        else
-            wait(2)
+            camera.CameraType = Enum.CameraType.Custom
         end
+
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        task.wait(0.2)
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        task.wait(1)
+
+        for _, wp in ipairs(waypoints) do
+            if wp == "jump" then
+                for i = 1, 2 do
+                    humanoidRootPart.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 2, 0)
+                    wait(0.5)
+                    humanoidRootPart.CFrame = humanoidRootPart.CFrame - Vector3.new(0, 2, 0)
+                    wait(0.5)
+                end
+            else
+                humanoidRootPart.CFrame = CFrame.new(wp)
+                wait(1)
+            end
+        end
+
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        task.wait(1)
     else
         wait(0.1)
     end
