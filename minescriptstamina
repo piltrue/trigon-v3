@@ -35,10 +35,15 @@ local waypoints = {
     Vector3.new(-161, 4, 39),
 }
 
-local function walkTo(humanoid, targetPos)
-    humanoid:MoveTo(targetPos)
-    humanoid.MoveToFinished:Wait()
-    task.wait(math.random(30, 70) / 100) -- nghỉ 0.3–0.7s sau khi tới nơi
+local function tpAndStep(humanoid, hrp, targetPos)
+    hrp.CFrame = CFrame.new(targetPos)
+    task.wait(0.2)
+
+    local forward = hrp.CFrame.LookVector * 2
+    humanoid:MoveTo(targetPos + forward)
+    humanoid.MoveToFinished:Wait(0.7)
+
+    task.wait(math.random(30, 70) / 100)
 end
 
 while true do
@@ -73,7 +78,7 @@ while true do
         task.wait(1)
 
         for _, wp in ipairs(waypoints) do
-            walkTo(humanoid, wp)
+            tpAndStep(humanoid, humanoidRootPart, wp)
 
             if wp.X == -162 and wp.Y == 4 and wp.Z == 37 then
                 for i = 1, 2 do
