@@ -1,37 +1,81 @@
 local player = game.Players.LocalPlayer
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local UserInputService = game:GetService("UserInputService")
 local camera = workspace.CurrentCamera
 
+local toggle = false
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
+        toggle = not toggle
+    end
+end)
+
+local waypoints = {
+    Vector3.new(-162, 4, 37),
+    "jump",
+    Vector3.new(-163, 4, -33),
+    Vector3.new(-162, 4, -104),
+    Vector3.new(-125, 4, -34),
+    Vector3.new(-124, 4, -208),
+    Vector3.new(-162, 4, -209),
+    Vector3.new(-20, 4, -209),
+    Vector3.new(-345, 4, -209),
+    Vector3.new(-543, 4, -208),
+    Vector3.new(-19, -17, -281),
+    Vector3.new(-650, -18, -281),
+    Vector3.new(-650, -18, 2),
+    Vector3.new(-555, 4, -183),
+    Vector3.new(-554, 4, 3),
+    Vector3.new(-464, 4, 3),
+    Vector3.new(-461, 4, 4),
+    Vector3.new(-294, 4, 4),
+    Vector3.new(-161, 4, 5),
+    Vector3.new(-161, 4, 39),
+    Vector3.new(-176, 4, 81),
+}
+
 while true do
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local targetMesh = game.Workspace.Debris.TrainingModels.RoadworkClock:FindFirstChild("Mesh")
+    if toggle then
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local targetMesh = game.Workspace.Debris.TrainingModels.RoadworkClock:FindFirstChild("Mesh")
 
-    if targetMesh and targetMesh:IsA("BasePart") then
-        local targetPosition = targetMesh.Position
-        humanoidRootPart.CFrame = CFrame.new(targetPosition)
+        if targetMesh and targetMesh:IsA("BasePart") then
+            humanoidRootPart.CFrame = CFrame.new(targetMesh.Position)
+            task.wait(0.5)
 
-        camera.CameraType = Enum.CameraType.Scriptable
-        local camOffset = Vector3.new(0, 10, 0)
-        camera.CFrame = CFrame.new(humanoidRootPart.Position + camOffset, humanoidRootPart.Position)
+            camera.CameraType = Enum.CameraType.Scriptable
+            local camOffset = Vector3.new(0, 8, -10)
+            camera.CFrame = CFrame.new(humanoidRootPart.Position + camOffset, targetMesh.Position)
+            task.wait(0.5)
+            camera.CameraType = Enum.CameraType.Custom
 
-        wait(1)
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
-        wait(2)
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+            task.wait(0.2)
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+            task.wait(1)
 
-        humanoidRootPart.CFrame = CFrame.new(-162, 4, 37)
+            for _, wp in ipairs(waypoints) do
+                if wp == "jump" then
+                    for i = 1, 2 do
+                        humanoidRootPart.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 2, 0)
+                        wait(0.5)
+                        humanoidRootPart.CFrame = humanoidRootPart.CFrame - Vector3.new(0, 2, 0)
+                        wait(0.5)
+                    end
+                else
+                    humanoidRootPart.CFrame = CFrame.new(wp)
+                    wait(1)
+                end
+            end
 
-        for i = 1, 2 do
-            wait(0.5)
-            humanoidRootPart.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 2, 0)
-            wait(0.5)
-            humanoidRootPart.CFrame = humanoidRootPart.CFrame - Vector3.new(0, 2, 0)
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+            task.wait(1)
+        else
+            wait(2)
         end
-
-        wait(1)
-        character:BreakJoints()
-        wait(3)
     else
-        wait(2)
+        wait(0.1)
     end
 end
