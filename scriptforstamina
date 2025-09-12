@@ -51,9 +51,9 @@ while true do
             local meshPos = targetMesh.Position
 
             local camOffsets = {
-                Vector3.new(0, 10, -10),  -- từ trên xuống + chéo sau
-                Vector3.new(10, 8, 0),    -- từ bên phải
-                Vector3.new(-10, 8, 0),   -- từ bên trái
+                Vector3.new(0, 10, -10),
+                Vector3.new(10, 8, 0),
+                Vector3.new(-10, 8, 0),
             }
 
             for _, offset in ipairs(camOffsets) do
@@ -64,9 +64,10 @@ while true do
             camera.CameraType = Enum.CameraType.Custom
         end
 
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
-        task.wait(0.2)
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        for i = 1, 2 do
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+            task.wait(0.2)
+        end
         task.wait(1)
 
         for _, wp in ipairs(waypoints) do
@@ -83,7 +84,10 @@ while true do
             end
         end
 
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+        for i = 1, 2 do
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+            task.wait(0.2)
+        end
         task.wait(1)
     else
         wait(0.1)
