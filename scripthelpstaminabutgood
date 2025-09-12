@@ -45,6 +45,7 @@ local function moveSmooth(hrp, targetPos, duration)
         hrp.CFrame = CFrame.new(newPos)
         task.wait(stepTime)
     end
+    task.wait(math.random(30, 70) / 100)
 end
 
 while true do
